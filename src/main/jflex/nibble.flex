@@ -11,9 +11,8 @@ hex = [a-fA-F]
 h = [hH]
 asig = <-?|>
 letter = [a-zA-Z]
-whitespace = [\s]
-tabulator = [\t]
-enter = [\n\r]
+space = " "
+
 %type Token
 %eofval{
     return new Token(TokenConstant.EOF, null, "");
@@ -82,9 +81,9 @@ enter = [\n\r]
 
 
 //Tabulador, enter y espacios
-{tabulator} { return new Token(TokenConstant.TABULATOR, yytext(), "");}
-{enter} { return new Token(TokenConstant.ENTER, yytext(), "");}
-{whitespace} { return new Token(TokenConstant.WHITESPACE, yytext(), "");}
+[\n] { return new Token(TokenConstant.ENTER, yytext(), "");}
+{space} { return new Token(TokenConstant.SPACE, yytext(), "");}
+{space}{4} { return new Token(TokenConstant.TABULATOR, yytext(), "");}
 
 
 // ERRORRES
