@@ -1,4 +1,6 @@
-# Rama principal para el compilador de Nibble
+# Nibble Compiler
+
+Rama principal para el compilador de Nibble
 
 
 Di-s bajó y nos dió Aria Math.
