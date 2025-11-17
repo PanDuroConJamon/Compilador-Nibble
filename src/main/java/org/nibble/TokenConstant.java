@@ -10,5 +10,5 @@ public enum TokenConstant {
     ENTER,
     TABULATOR,
     ERROR,
-    EOF;
+    EOF,
 }
