@@ -1,8 +1,12 @@
 package org.nibble;
 
-public enum TokenConstants {
+public enum TokenConstant {
+    RESERVED_WORD,
     IDENTIFIER,
+    NUMBER,
+    HEXADECIMAL,
+    OPERATOR,
     WHITESPACE,
-    INTEGER,
-    EOF,
+    ERROR,
+    EOF;
 }

@@ -1,20 +1,29 @@
 package org.nibble;
 
 public class Token {
-    private TokenConstants tokenType;
+    private TokenConstant tokenType;
     private String tokenLexeme;
+    private String msg = "";
 
-    public Token(TokenConstants tokenType, String tokenLexeme) {
+    public Token(TokenConstant tokenType, String tokenLexeme, String msg) {
         this.tokenType = tokenType;
         this.tokenLexeme = tokenLexeme;
+        this.msg = msg;
+    }
+
+    public void setTokenLexeme(String tokenLexeme) {
+        this.tokenLexeme = tokenLexeme;
+    }
+    public TokenConstant getTokenType() {
+        return tokenType;
     }
 
     public String getTokenLexeme() {
         return tokenLexeme;
     }
 
-    public void setTokenLexeme(String tokenLexeme) {
-        this.tokenLexeme = tokenLexeme;
+    public void setTokenType(TokenConstant tokenType) {
+        this.tokenType = tokenType;
     }
 
     @Override
@@ -22,6 +31,7 @@ public class Token {
         return "Token{" +
                 "tokenType=" + tokenType +
                 ", tokenLexeme='" + tokenLexeme + '\'' +
+                ", msg='" + msg + '\'' +
                 '}';
     }
 }
