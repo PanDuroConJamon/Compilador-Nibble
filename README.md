@@ -1,4 +1,4 @@
-# Nibble Compiler
+# Compilador del Lenguaje Nibble .nbl
 
 Rama principal para el compilador de Nibble
 
