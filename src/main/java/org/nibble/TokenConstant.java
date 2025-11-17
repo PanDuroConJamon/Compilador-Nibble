@@ -7,6 +7,8 @@ public enum TokenConstant {
     HEXADECIMAL,
     OPERATOR,
     WHITESPACE,
+    ENTER,
+    TABULATOR,
     ERROR,
     EOF;
 }
