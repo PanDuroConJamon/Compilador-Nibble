@@ -5,13 +5,17 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class MainController {
 
+    // Archivo actualmente abierto/guardado
+    private File archivoActual;
 
     @FXML
     private AnchorPane anchorPaneMain;
@@ -20,14 +24,12 @@ public class MainController {
     @FXML
     private AnchorPane anchorPaneLineCount;
 
-
     @FXML
     private TextArea textAreaCode;
     @FXML
     private TextArea textAreaLineCount;
     @FXML
     private TextArea textAreaMessageOutput;
-
 
     @FXML
     private MenuItem menuItemNuevoArchivo;
@@ -49,11 +51,13 @@ public class MainController {
 
 
 
+
     @FXML
     public void initialize() {
         textAreaLineCount.setEditable(false);
         textAreaLineCount.setText("1");
         textAreaCode.textProperty().addListener((obs, oldText, newText) -> actualizarLineas());
+        actualizarTitulo(); // al iniciar, título base
     }
 
     private void actualizarLineas() {
@@ -70,34 +74,51 @@ public class MainController {
         textAreaLineCount.setText(sb.toString());
     }
 
-    private void Limpieza(){
+    private void actualizarTitulo() {
+        if (textAreaCode == null || textAreaCode.getScene() == null) {
+            return;
+        }
+        Window window = textAreaCode.getScene().getWindow();
+        if (window instanceof Stage stage) {
+            String baseTitle = "Nibble";
+            if (archivoActual != null) {
+                stage.setTitle(baseTitle + " - " + archivoActual.getName());
+            } else {
+                stage.setTitle(baseTitle);
+            }
+        }
+    }
+
+    private void limpieza(){
         textAreaCode.setText("");
         textAreaLineCount.setText("");
         textAreaMessageOutput.setText("");
+        archivoActual = null; // no hay archivo asociado
         actualizarLineas();
+        actualizarTitulo();
     }
+
+
+
 
     @FXML
     protected void onNuevoArchivoClick(){
         System.out.println("Nuevo Archivo");
-        Limpieza();
+        limpieza();
     }
 
     @FXML
     protected void onAbrirArchivoClick(){
-        Limpieza();
+        limpieza();
         System.out.println("Abrir Archivo");
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Abrir archivo");
-
-
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Archivos Nibble (*.nbl)", "*.nbl"),
                 new FileChooser.ExtensionFilter("Archivos de texto (*.txt)", "*.txt"),
                 new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
         );
-
 
         Window window = textAreaCode.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(window);
@@ -106,26 +127,70 @@ public class MainController {
             try {
                 String content = Files.readString(selectedFile.toPath());
                 textAreaCode.setText(content);
+                archivoActual = selectedFile;
+                textAreaMessageOutput.setText("Archivo abierto: " + selectedFile.getName());
+                actualizarTitulo();
             } catch (Exception e) {
                 e.printStackTrace();
                 textAreaMessageOutput.setText("Error al leer el archivo: " + e.getMessage());
             }
         }
     }
+
     @FXML
     protected void onGuardarArchivoClick(){
         System.out.println("Guardar Archivo");
+        if (archivoActual != null) {
+            guardarEnArchivo(archivoActual);
+        } else {
+            onGuardarComoClick();
+        }
     }
 
     @FXML
     protected void onGuardarComoClick(){
         System.out.println("Guardar Como");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar archivo como");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Archivos Nibble (*.nbl)", "*.nbl"),
+                new FileChooser.ExtensionFilter("Archivos de texto (*.txt)", "*.txt"),
+                new FileChooser.ExtensionFilter("Todos los archivos", "*.*")
+        );
+
+
+        if (archivoActual != null) {
+            fileChooser.setInitialFileName(archivoActual.getName());
+        } else {
+            fileChooser.setInitialFileName("nuevo_archivo.nbl");
+        }
+
+        Window window = textAreaCode.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(window);
+
+        if (file != null) {
+            archivoActual = file;
+            guardarEnArchivo(file);
+        }
+    }
+
+    private void guardarEnArchivo(File file) {
+        try {
+            String content = textAreaCode.getText();
+            Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);
+            textAreaMessageOutput.setText("Archivo guardado: " + file.getName());
+            actualizarTitulo();
+        } catch (Exception e) {
+            e.printStackTrace();
+            textAreaMessageOutput.setText("Error al guardar el archivo: " + e.getMessage());
+        }
     }
 
     @FXML
     protected void onCerrarArchivoClick(){
         System.out.println("Cerrar Archivo");
-        Limpieza();
+        limpieza();
     }
 
     @FXML
@@ -142,8 +207,5 @@ public class MainController {
     protected void onTablaDeSimbolos1Click(){
         System.out.println("Tabla De Simbolos 1");
     }
-
-
-
 
 }

@@ -9,12 +9,12 @@
 
 <AnchorPane fx:id="anchorPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-border-color: #8f6386;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nibble.compiladornibblejavafx.MainController">
    <children>
-      <TextArea fx:id="textAreaCode" layoutX="314.0" layoutY="211.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #86898a;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+      <TextArea fx:id="textAreaCode" layoutX="314.0" layoutY="211.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #86898a;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
          <font>
             <Font name="Ubuntu Mono Regular" size="14.0" />
          </font>
       </TextArea>
-      <AnchorPane fx:id="anchorPaneLineCount" layoutX="2.0" layoutY="32.0" prefHeight="626.0" prefWidth="45.0" style="-fx-background-color: #86898a; -fx-border-style: none;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
+      <AnchorPane fx:id="anchorPaneLineCount" layoutX="2.0" layoutY="32.0" prefHeight="626.0" prefWidth="45.0" style="-fx-background-color: #86898a; -fx-border-style: none;" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
          <children>
             <TextArea fx:id="textAreaLineCount" disable="true" layoutX="10.0" layoutY="17.0" prefHeight="614.0" prefWidth="47.0" text="1&#10;2&#10;3&#10;4&#10;5&#10;6&#10;7&#10;8&#10;9&#10;10&#10;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
@@ -22,7 +22,7 @@
                </font>
             </TextArea>
          </children></AnchorPane>
-      <AnchorPane fx:id="anchorPaneMessageOutput" layoutX="2.0" prefHeight="70.0" prefWidth="1278.0" style="-fx-background-color: #27aad6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane fx:id="anchorPaneMessageOutput" layoutX="2.0" prefHeight="90.0" prefWidth="1278.0" style="-fx-background-color: #27aad6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <TextArea fx:id="textAreaMessageOutput" disable="true" layoutX="78.0" layoutY="24.0" prefHeight="21.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
          </children></AnchorPane>
@@ -33,6 +33,7 @@
               <MenuItem fx:id="menuItemNuevoArchivo" mnemonicParsing="false" onAction="#onNuevoArchivoClick" text="Nuevo" />
                   <MenuItem fx:id="menuItemAbrirArchivo" mnemonicParsing="false" onAction="#onAbrirArchivoClick" text="Abrir" />
                   <MenuItem fx:id="menuItemGuardarArchivo" mnemonicParsing="false" onAction="#onGuardarArchivoClick" text="Guardar" />
+                  <MenuItem fx:id="menuItemGuardarComo" mnemonicParsing="false" onAction="#onGuardarComoClick" text="Guardar Como" />
                   <MenuItem fx:id="menuItemCerrarArchivo" mnemonicParsing="false" onAction="#onCerrarArchivoClick" text="Cerrar" />
             </items>
           </Menu>
