@@ -51,6 +51,11 @@
               <MenuItem fx:id="menuItemTablaDeSimbolos1" mnemonicParsing="false" onAction="#onTablaDeSimbolos1Click" text="Tabla de Símbolo" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Info">
+               <items>
+                  <MenuItem fx:id="menuItemAcerca" mnemonicParsing="false" onAction="#onAcercaClick" text="Acerca" />
+               </items>
+            </Menu>
         </menus>
       </MenuBar>
    </children>

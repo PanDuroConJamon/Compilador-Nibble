@@ -65,6 +65,9 @@ space = " "
 // ALTO
 [Aa][Ll][Tt][Oo] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
+// SALTO
+[Ss][Aa][Ll][Tt][Oo] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline +1, "");  }
+
 
 
 // NÚMEROS

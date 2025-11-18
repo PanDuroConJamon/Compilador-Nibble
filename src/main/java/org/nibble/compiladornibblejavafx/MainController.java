@@ -43,9 +43,9 @@ public class MainController {
     @FXML
     private MenuItem menuItemNuevoArchivo;
     @FXML
-    private MenuItem menuItemAbrirArchivo;
-    @FXML
     private MenuItem menuItemGuardarArchivo;
+    @FXML
+    private MenuItem menuItemAbrirArchivo;
     @FXML
     private MenuItem menuItemGuardarComo;
     @FXML
@@ -58,6 +58,8 @@ public class MainController {
     @FXML
     private MenuItem menuItemTablaDeSimbolos1;
 
+    @FXML
+    private MenuItem menuAcerca;
 
 
 
@@ -137,43 +139,6 @@ public class MainController {
                     textAreaMessageOutput.setText("Compilación con errores \n" + String.join("\n", errores));
                 }else{
                     textAreaMessageOutput.setText("Compilación exitosa");
-
-                    // Segundo cuadro de diálogo: mostrar identifiers
-                    String idsText;
-                    if (identifiers.isEmpty()) {
-                        idsText = " ";
-                    } else {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(String.format("%-20s %s%n", "Identificador", "Línea"));
-                        sb.append("-------------------- ------\n");
-                        for (String s : identifiers) {
-                            // si los guardas como "lexema linea"
-                            String[] parts = s.split(" ");
-                            String lexema = parts[0];
-                            String linea = parts[1];
-                            sb.append(String.format("%-20s %s%n", lexema, linea));
-                        }
-                        idsText = sb.toString();
-                    }
-
-                    Alert alertIds = new Alert(Alert.AlertType.NONE);
-                    alertIds.setTitle("TS");
-
-                    // Usar un TextArea dentro del diálogo
-                    TextArea area = new TextArea(idsText);
-                    area.setEditable(false);
-                    area.setWrapText(false);
-                    area.setPrefColumnCount(40);
-                    area.setPrefRowCount(10);
-                    area.setStyle("-fx-font-family: 'Ubuntu Mono', 'Consolas', 'Monospaced';");
-
-                    alertIds.getDialogPane().setContent(area);
-                    alertIds.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-
-                    ButtonType btnCerrar = new ButtonType("Cerrar", ButtonBar.ButtonData.CANCEL_CLOSE);
-                    alertIds.getButtonTypes().add(btnCerrar);
-
-                    alertIds.showAndWait();
                 }
 
 
@@ -286,7 +251,6 @@ public class MainController {
 
     @FXML
     protected void onEjecutarLexicoClick(){
-        System.out.println("Ejecutar Lexico");
         ejecutarLexico("");
 
     }
@@ -299,6 +263,104 @@ public class MainController {
     @FXML
     protected void onTablaDeSimbolos1Click(){
         System.out.println("Tabla De Simbolos 1");
+        System.out.println("Ejecutar ts");
+        if(archivoActual != null){
+            onGuardarArchivoClick();
+            try {
+                boolean error = false;
+                errores.clear();
+                identifiers.clear();
+
+                BufferedReader bfr = Files.newBufferedReader(archivoActual.toPath());
+                Lexer lexer = new Lexer(bfr);
+                Token token = lexer.yylex();
+                while (token.getTokenType() != TokenConstant.EOF) {
+                    System.out.println(token);
+                    if(token.getTokenType() == TokenConstant.ERROR){
+                        error = true;
+                        errores.add("Error en linea " + token.getLine() + ": " + token.getMsg());
+                    }
+                    if(token.getTokenType() == TokenConstant.IDENTIFIER){
+                        String lexema = token.getTokenLexeme();
+                        int linea = token.getLine();
+
+                        boolean yaExiste = identifiers.stream()
+                                .anyMatch(s -> {
+                                    String[] parts = s.split(" ");
+                                    return parts.length >= 1 && parts[0].equals(lexema);
+                                });
+
+                        String tipo = yaExiste ? "Referencia" : "Declaracion";
+                        identifiers.add(lexema + " " + linea + " " + tipo);
+                    }
+                    token = lexer.yylex();
+                }
+                if(error){
+                    textAreaMessageOutput.setText("Compilación con errores \n" + String.join("\n", errores));
+                }else{
+                    textAreaMessageOutput.setText("Compilación exitosa");
+
+
+                    String idsText;
+                    if (identifiers.isEmpty()) {
+                        idsText = " ";
+                    } else {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(String.format("%-20s %-8s %-12s%n", "Identificador", "Línea", "Tipo"));
+                        sb.append("-------------------- -------- ------------\n");
+                        for (String s : identifiers) {
+                            // guardado como "lexema linea tipo"
+                            String[] parts = s.split(" ");
+                            String lexema = parts.length > 0 ? parts[0] : "";
+                            String linea  = parts.length > 1 ? parts[1] : "";
+                            String tipo   = parts.length > 2 ? parts[2] : "";
+                            sb.append(String.format("%-20s %-8s %-12s%n", lexema, linea, tipo));
+                        }
+                        idsText = sb.toString();
+                    }
+
+                    Alert alertIds = new Alert(Alert.AlertType.NONE);
+                    alertIds.setTitle("TS");
+                    alertIds.setResizable(true); // <--- hace el diálogo redimensionable
+
+                    TextArea area = new TextArea(idsText);
+                    area.setEditable(false);
+                    area.setWrapText(false);
+                    area.setPrefColumnCount(60);
+                    area.setPrefRowCount(20);
+                    area.setStyle("-fx-font-family: 'Ubuntu Mono', 'Consolas', 'Monospaced';");
+
+                    alertIds.getDialogPane().setContent(area);
+                    alertIds.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                    alertIds.getDialogPane().setMinWidth(Region.USE_PREF_SIZE);
+                    alertIds.getDialogPane().setPrefSize(800, 400); // tamaño inicial cómodo
+
+                    ButtonType btnCerrar = new ButtonType("Cerrar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    alertIds.getButtonTypes().add(btnCerrar);
+
+                    alertIds.showAndWait();
+                }
+
+
+                System.out.println("Analisis léxico finalizado");
+            } catch (Exception e) {
+                e.printStackTrace();
+                textAreaMessageOutput.setText("Error al ejecutar el lexico: " + e.getMessage());
+            }
+        }else{
+            onGuardarArchivoClick();
+            textAreaMessageOutput.setText("");
+        }
     }
 
+
+    @FXML private void onAcercaClick(){
+        System.out.println("" +
+                "--- NIBBLE COMPILER 1.0 ---\n\n" +
+                "    NibbleLexerCore 1.0\n" +
+                "   NibbleParserCore 1.0\n\n" +
+                "--------------------------\n\n" +
+                "Owner: Cesar Rosas\n" +
+                "GitHub: @PanDuroConJamon\n");
+    }
 }
