@@ -1,8 +1,8 @@
-package org.nibble;
+package org.nibble.compiladornibblejavafx.jflex;
 
 public enum TokenConstant {
     RESERVED_WORD,
-    REGISTRE,
+    REGISTER,
     IDENTIFIER,
     NUMBER,
     HEXADECIMAL,
@@ -10,6 +10,7 @@ public enum TokenConstant {
     SPACE,
     ENTER,
     TABULATOR,
+    COMMENT,
     ERROR,
     EOF,
 }

@@ -1,5 +1,4 @@
-package org.nibble.compiladornibblejavafx;
-
+package org.nibble.compiladornibblejavafx.jflex;
 
 import picocli.CommandLine;
 
@@ -11,8 +10,8 @@ import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "lexer", mixinStandardHelpOptions = true, version = "NibbleLexer 1.0",
-description = "Analizador léxico simplificado para pruebas")
-public class PicoCLI implements Callable<Integer> {
+description = "NibblelexerCore - Núcleo del analizador léxico de Nibble ")
+public class NibbleLexerCore implements Callable<Integer> {
 
     @CommandLine.Option(names = {"-f", "--file"}, description = "Archivo a procesar", required = false)
     private File file;
@@ -50,7 +49,7 @@ public class PicoCLI implements Callable<Integer> {
 
     public static void main(String[] args) {
         //System.out.println("NibbleLexer 1.0 Iniciando...");
-        int exitCode = new CommandLine(new PicoCLI()).execute(args);
+        int exitCode = new CommandLine(new NibbleLexerCore()).execute(args);
         //System.out.println(exitCode == 0 ? "NibbleLexer 1.0 Terminado." : "NibbleLexer 1.0 Terminado con errores.");
     }
 

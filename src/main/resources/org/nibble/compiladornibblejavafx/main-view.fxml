@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-border-color: #8f6386;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nibble.compiladornibblejavafx.HelloController">
+   <children>
+      <AnchorPane layoutX="2.0" layoutY="32.0" prefHeight="626.0" prefWidth="45.0" style="-fx-background-color: #86898a;" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0">
+         <children>
+            <TextArea layoutX="10.0" layoutY="17.0" prefHeight="614.0" prefWidth="47.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+         </children></AnchorPane>
+      <AnchorPane layoutX="2.0" prefHeight="70.0" prefWidth="1278.0" style="-fx-background-color: #27aad6;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <TextArea disable="true" layoutX="78.0" layoutY="24.0" prefHeight="21.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+         </children></AnchorPane>
+      <MenuBar layoutX="2.0" layoutY="2.0" prefHeight="31.0" prefWidth="1278.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Archivo">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Nuevo" />
+                  <MenuItem mnemonicParsing="false" text="Abrir" />
+                  <MenuItem mnemonicParsing="false" text="Guardar" />
+                  <MenuItem mnemonicParsing="false" text="Cerrar" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Compilar">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Léxico" />
+                  <MenuItem mnemonicParsing="false" text="Sintáctico" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="TS">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TextArea layoutX="314.0" layoutY="211.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+         <font>
+            <Font name="Ubuntu Mono Regular" size="24.0" />
+         </font>
+      </TextArea>
+   </children>
+</AnchorPane>

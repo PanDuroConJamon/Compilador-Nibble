@@ -5,6 +5,9 @@ package org.nibble.compiladornibblejavafx.jflex;
 %%
 %public
 %class Lexer
+%type Token
+%line
+%column
 
 num = [0-9]|1[0-5]
 hex = [a-fA-F]
@@ -13,89 +16,88 @@ asig = <-?|>
 letter = [a-zA-Z]
 space = " "
 
-%type Token
 %eofval{
-    return new Token(TokenConstant.EOF, null, "");
+    return new Token(TokenConstant.EOF, null, yyline, "");
 %eofval}
 
 %%
 
 // PALABRAS RESERVADAS
 // AND
-[Aa][Nn][Dd] {return new Token(TokenConstant.RESERVED_WORD, yytext(), "");}
+[Aa][Nn][Dd] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, "");}
 
 // OR
-[Oo][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Oo][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // XOR
-[Xx][Oo][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Xx][Oo][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // NOT
-[Nn][Oo][Tt] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Nn][Oo][Tt] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // SUMA
-[Ss][Uu][Mm][Aa] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Ss][Uu][Mm][Aa] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // SUMAC
-[Ss][Uu][Mm][Aa][Cc] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Ss][Uu][Mm][Aa][Cc] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // RESTA
-[Rr][Ee][Ss][Tt][Aa] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Rr][Ee][Ss][Tt][Aa] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // RESTAC
-[Rr][Ee][Ss][Tt][Aa][Cc] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Rr][Ee][Ss][Tt][Aa][Cc] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // IDES
-[Ii][Dd][Ee][Ss] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Ii][Dd][Ee][Ss] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // DDES
-[Dd][Dd][Ee][Ss] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Dd][Dd][Ee][Ss] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // CARGAR
-[Cc][Aa][Rr][Gg][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Cc][Aa][Rr][Gg][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext() + 1, yyline, ""); }
 
 // BORRAR
-[Bb][Oo][Rr][Rr][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Bb][Oo][Rr][Rr][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // TODO
-[Tt][Oo][Dd][Oo] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Tt][Oo][Dd][Oo] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // ALTO
-[Aa][Ll][Tt][Oo] { return new Token(TokenConstant.RESERVED_WORD, yytext(), ""); }
+[Aa][Ll][Tt][Oo] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 
 
 // NÚMEROS
 // Enteros (1)
-{num} { return new Token(TokenConstant.NUMBER, yytext(), ""); }
+{num} { return new Token(TokenConstant.NUMBER, yytext(), yyline + 1, ""); }
 // Hexadecimal
-{hex}{h}? { return new Token(TokenConstant.HEXADECIMAL, yytext(), "");}
+{hex}{h}? { return new Token(TokenConstant.HEXADECIMAL, yytext(), yyline + 1, "");}
 
 // OPERADORES
-{asig} { return new Token(TokenConstant.OPERATOR, yytext(), "");}
-[:] { return new Token(TokenConstant.OPERATOR, yytext(), "");}
+{asig} { return new Token(TokenConstant.OPERATOR, yytext(), yyline + 1, "");}
+[:] { return new Token(TokenConstant.OPERATOR, yytext(), yyline + 1, "");}
 
 
 // IDENTIFICADORES
-{letter}({letter}|[0-9])* { return new Token(TokenConstant.IDENTIFIER, yytext(), ""); }
+{letter}({letter}|[0-9])* { return new Token(TokenConstant.IDENTIFIER, yytext() + 1, yyline, ""); }
 
 
 //Tabulador, enter y espacios
-[\n] { return new Token(TokenConstant.ENTER, "\\n", "");}
-{space} { return new Token(TokenConstant.SPACE, yytext(), "");}
-{space}{4}|[\t] { return new Token(TokenConstant.TABULATOR, yytext()+"\\t", "");}
+[\n] { return new Token(TokenConstant.ENTER, "\\n", yyline, "");}
+{space} { return new Token(TokenConstant.SPACE, yytext(), yyline, "");}
+{space}{4}|[\t] { return new Token(TokenConstant.TABULATOR, yytext()+"\\t", yyline + 1, "");}
 
 
 // ERRORRES
 // Identificadores que inician con números
-{num}+{letter}+ { return new Token(TokenConstant.ERROR, yytext(), "La cadena \""+yytext()+"\" es ilegal"); }
+{num}+{letter}+ { return new Token(TokenConstant.ERROR, yytext(), yyline + 1, "La cadena \""+yytext()+"\" es ilegal"); }
 // Operadores invalidos
-{asig}({letter}|{num})* { return new Token(TokenConstant.ERROR, yytext(), "La cadena \""+yytext()+"\" es ilegal"); }
+{asig}({letter}|{num})* { return new Token(TokenConstant.ERROR, yytext(), yyline + 1, "La cadena \""+yytext()+"\" es ilegal"); }
 // Números que exceden 15
-1[6-9]|[1-9][0-9]* { return new Token(TokenConstant.ERROR, yytext(), "El número "+yytext()+" excede el tamaño" +
+1[6-9]|[1-9][0-9]* { return new Token(TokenConstant.ERROR, yytext(), yyline + 1, "El número "+yytext()+" excede el tamaño" +
        " permitido"); }
 
-[^] { return new Token(TokenConstant.ERROR, yytext(), "La cadena \""+yytext()+"\" es ilegal"); }
+[^] { return new Token(TokenConstant.ERROR, yytext(), yyline + 1, "La cadena \""+yytext()+"\" es ilegal"); }
 
 
 
