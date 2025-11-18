@@ -79,7 +79,7 @@ space = " "
 
 
 // IDENTIFICADORES
-{letter}({letter}|[0-9])* { return new Token(TokenConstant.IDENTIFIER, yytext() + 1, yyline, ""); }
+{letter}({letter}|[0-9])* { return new Token(TokenConstant.IDENTIFIER, yytext(), yyline + 1, ""); }
 
 
 //Tabulador, enter y espacios
