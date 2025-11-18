@@ -7,15 +7,23 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.nibble.compiladornibblejavafx.jflex.Lexer;
+import org.nibble.compiladornibblejavafx.jflex.Token;
+import org.nibble.compiladornibblejavafx.jflex.TokenConstant;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainController {
 
     // Archivo actualmente abierto/guardado
     private File archivoActual;
+    private List<String> errores = new ArrayList<>();
 
     @FXML
     private AnchorPane anchorPaneMain;
@@ -89,6 +97,55 @@ public class MainController {
         }
     }
 
+    private void guardarEnArchivo(File file) {
+        try {
+            String content = textAreaCode.getText();
+            Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);
+            //textAreaMessageOutput.setText("Archivo guardado: " + file.getName());
+            actualizarTitulo();
+        } catch (Exception e) {
+            e.printStackTrace();
+            textAreaMessageOutput.setText("Error al guardar el archivo: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarLexico(){
+        System.out.println("Ejecutar Lexico");
+        if(archivoActual != null){
+            onGuardarArchivoClick();
+            try {
+                BufferedReader bfr = Files.newBufferedReader(archivoActual.toPath());
+                Lexer lexer = new Lexer(bfr);
+                Token token = lexer.yylex();
+                int i = 0;
+                boolean error = false;
+                while (token.getTokenType() != TokenConstant.EOF) {
+                    System.out.println(token);
+                    if(token.getTokenType() == TokenConstant.ERROR){
+                        error = true;
+                        System.out.println("ERROOOOORR");
+                        errores.add("Error en linea " + token.getLine() + ": " + token.getMsg());
+                    }
+                    token = lexer.yylex();
+                }
+                if(error){
+                    textAreaMessageOutput.setText("Compilación con errores \n" + String.join("\n", errores));
+                }else{
+                    textAreaMessageOutput.setText("Compilación exitosa");
+                }
+
+
+                System.out.println("Analisis léxico finalizado");
+            } catch (Exception e) {
+                e.printStackTrace();
+                textAreaMessageOutput.setText("Error al ejecutar el lexico: " + e.getMessage());
+            }
+        }else{
+            onGuardarArchivoClick();
+            textAreaMessageOutput.setText("");
+        }
+    }
+
     private void limpieza(){
         textAreaCode.setText("");
         textAreaLineCount.setText("");
@@ -128,7 +185,7 @@ public class MainController {
                 String content = Files.readString(selectedFile.toPath());
                 textAreaCode.setText(content);
                 archivoActual = selectedFile;
-                textAreaMessageOutput.setText("Archivo abierto: " + selectedFile.getName());
+                //textAreaMessageOutput.setText("Archivo abierto: " + selectedFile.getName());
                 actualizarTitulo();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -175,17 +232,7 @@ public class MainController {
         }
     }
 
-    private void guardarEnArchivo(File file) {
-        try {
-            String content = textAreaCode.getText();
-            Files.writeString(file.toPath(), content, StandardCharsets.UTF_8);
-            textAreaMessageOutput.setText("Archivo guardado: " + file.getName());
-            actualizarTitulo();
-        } catch (Exception e) {
-            e.printStackTrace();
-            textAreaMessageOutput.setText("Error al guardar el archivo: " + e.getMessage());
-        }
-    }
+
 
     @FXML
     protected void onCerrarArchivoClick(){
@@ -196,6 +243,8 @@ public class MainController {
     @FXML
     protected void onEjecutarLexicoClick(){
         System.out.println("Ejecutar Lexico");
+        ejecutarLexico();
+
     }
 
     @FXML
