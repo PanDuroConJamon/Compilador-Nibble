@@ -1,9 +1,9 @@
 package org.nibble.compiladornibblejavafx;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -24,6 +24,7 @@ public class MainController {
     // Archivo actualmente abierto/guardado
     private File archivoActual;
     private List<String> errores = new ArrayList<>();
+    private List<String> identifiers  = new ArrayList<>();
 
     @FXML
     private AnchorPane anchorPaneMain;
@@ -109,22 +110,26 @@ public class MainController {
         }
     }
 
-    private void ejecutarLexico(){
+    private void ejecutarLexico(String seccción){
         System.out.println("Ejecutar Lexico");
         if(archivoActual != null){
             onGuardarArchivoClick();
             try {
+                boolean error = false;
+                errores.clear();
+                identifiers.clear();
+
                 BufferedReader bfr = Files.newBufferedReader(archivoActual.toPath());
                 Lexer lexer = new Lexer(bfr);
                 Token token = lexer.yylex();
-                int i = 0;
-                boolean error = false;
                 while (token.getTokenType() != TokenConstant.EOF) {
                     System.out.println(token);
                     if(token.getTokenType() == TokenConstant.ERROR){
                         error = true;
-                        System.out.println("ERROOOOORR");
                         errores.add("Error en linea " + token.getLine() + ": " + token.getMsg());
+                    }
+                    if(token.getTokenType() == TokenConstant.IDENTIFIER){
+                        identifiers.add(token.getTokenLexeme() + " " + token.getLine());
                     }
                     token = lexer.yylex();
                 }
@@ -132,6 +137,43 @@ public class MainController {
                     textAreaMessageOutput.setText("Compilación con errores \n" + String.join("\n", errores));
                 }else{
                     textAreaMessageOutput.setText("Compilación exitosa");
+
+                    // Segundo cuadro de diálogo: mostrar identifiers
+                    String idsText;
+                    if (identifiers.isEmpty()) {
+                        idsText = " ";
+                    } else {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(String.format("%-20s %s%n", "Identificador", "Línea"));
+                        sb.append("-------------------- ------\n");
+                        for (String s : identifiers) {
+                            // si los guardas como "lexema linea"
+                            String[] parts = s.split(" ");
+                            String lexema = parts[0];
+                            String linea = parts[1];
+                            sb.append(String.format("%-20s %s%n", lexema, linea));
+                        }
+                        idsText = sb.toString();
+                    }
+
+                    Alert alertIds = new Alert(Alert.AlertType.NONE);
+                    alertIds.setTitle("TS");
+
+                    // Usar un TextArea dentro del diálogo
+                    TextArea area = new TextArea(idsText);
+                    area.setEditable(false);
+                    area.setWrapText(false);
+                    area.setPrefColumnCount(40);
+                    area.setPrefRowCount(10);
+                    area.setStyle("-fx-font-family: 'Ubuntu Mono', 'Consolas', 'Monospaced';");
+
+                    alertIds.getDialogPane().setContent(area);
+                    alertIds.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+
+                    ButtonType btnCerrar = new ButtonType("Cerrar", ButtonBar.ButtonData.CANCEL_CLOSE);
+                    alertIds.getButtonTypes().add(btnCerrar);
+
+                    alertIds.showAndWait();
                 }
 
 
@@ -162,6 +204,8 @@ public class MainController {
     protected void onNuevoArchivoClick(){
         System.out.println("Nuevo Archivo");
         limpieza();
+        archivoActual = null;
+        onGuardarArchivoClick();
     }
 
     @FXML
@@ -243,7 +287,7 @@ public class MainController {
     @FXML
     protected void onEjecutarLexicoClick(){
         System.out.println("Ejecutar Lexico");
-        ejecutarLexico();
+        ejecutarLexico("");
 
     }
 
