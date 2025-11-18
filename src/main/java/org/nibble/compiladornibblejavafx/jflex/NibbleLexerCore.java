@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(name = "lexer", mixinStandardHelpOptions = true, version = "NibbleLexer 1.0",
-description = "NibblelexerCore - Núcleo del analizador léxico de Nibble ")
+description = "NibbleLexerCore - Núcleo del analizador léxico de Nibble ")
 public class NibbleLexerCore implements Callable<Integer> {
 
     @CommandLine.Option(names = {"-f", "--file"}, description = "Archivo a procesar", required = false)

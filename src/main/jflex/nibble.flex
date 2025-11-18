@@ -83,8 +83,8 @@ space = " "
 
 
 //Tabulador, enter y espacios
-[\n] { return new Token(TokenConstant.ENTER, "\\n", yyline, "");}
-{space} { return new Token(TokenConstant.SPACE, yytext(), yyline, "");}
+[\n] { return new Token(TokenConstant.ENTER, "\\n", yyline + 1, "");}
+{space} { return new Token(TokenConstant.SPACE, yytext(), yyline + 1, "");}
 {space}{4}|[\t] { return new Token(TokenConstant.TABULATOR, yytext()+"\\t", yyline + 1, "");}
 
 
