@@ -3,6 +3,7 @@ package org.nibble.compiladornibblejavafx.jflex;
 public enum TokenConstant {
     RESERVED_WORD,
     REGISTER,
+    AND,
     IDENTIFIER,
     NUMBER,
     HEXADECIMAL,

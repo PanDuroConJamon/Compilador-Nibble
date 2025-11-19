@@ -68,6 +68,14 @@ space = " "
 // SALTO
 [Ss][Aa][Ll][Tt][Oo] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline +1, "");  }
 
+// IDES
+[Ii][Dd][Ee][Ss] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, "");}
+
+// DDES
+[Dd][Dd][Ee][Ss] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, "");}
+
+// REGISTROS
+[Rr][a-dA-D] {return new Token(TokenConstant.REGISTER, yytext(), yyline +1, "");}
 
 
 // NÚMEROS

@@ -357,8 +357,8 @@ public class MainController {
     @FXML private void onAcercaClick(){
         System.out.println("" +
                 "--- NIBBLE COMPILER 1.0 ---\n\n" +
-                "    NibbleLexerCore 1.0\n" +
-                "   NibbleParserCore 1.0\n\n" +
+                "    NibbleLexerCore 1.2\n" +
+                "   NibbleParserCore 0.1\n\n" +
                 "--------------------------\n\n" +
                 "Owner: Cesar Rosas\n" +
                 "GitHub: @PanDuroConJamon\n");
