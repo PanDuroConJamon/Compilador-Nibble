@@ -13,7 +13,7 @@ num = [0-9]|1[0-5]
 hex = [a-fA-F]
 h = [hH]
 asig = <-?|>
-letter = [a-zA-Z]
+letter = [a-zA-Z_-]
 space = " "
 
 %eofval{
@@ -54,7 +54,10 @@ space = " "
 [Dd][Dd][Ee][Ss] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
 
 // CARGAR
-[Cc][Aa][Rr][Gg][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext() + 1, yyline, ""); }
+[Cc][Aa][Rr][Gg][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
+
+// MOSTRAR
+[Mm][Oo][Ss][Tt][Rr][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, "");}
 
 // BORRAR
 [Bb][Oo][Rr][Rr][Aa][Rr] { return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, ""); }
@@ -73,6 +76,8 @@ space = " "
 
 // DDES
 [Dd][Dd][Ee][Ss] {return new Token(TokenConstant.RESERVED_WORD, yytext(), yyline + 1, "");}
+
+
 
 // REGISTROS
 [Rr][a-dA-D] {return new Token(TokenConstant.REGISTER, yytext(), yyline +1, "");}
