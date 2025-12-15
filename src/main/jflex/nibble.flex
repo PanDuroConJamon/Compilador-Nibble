@@ -1,11 +1,14 @@
 
 //Archivo de especificación
 package org.nibble.compiladornibblejavafx.jflex;
+import java_cup.runtime.*;
+
 
 %%
 %public
 %class Lexer
 %type Token
+%cup
 %line
 %column
 
@@ -14,7 +17,20 @@ asig = <-?|>
 letter = [a-zA-Z_-]
 space = " "
 
+
+%{
+    StringBuffer string = new StringBuffer();
+    private Symbol symbol(int type){
+        return new Symbol(type, yyline, yycolumn);
+    }
+
+    private Symbol symbol(int type, Object value){
+        return new Symbol(type, yyline, yycolumn, value);
+    }
+%}
+
 %eofval{
+    //return symbol(ParserSym.EOF);
     return new Token(TokenConstant.EOF, null, yyline, "");
 %eofval}
 
